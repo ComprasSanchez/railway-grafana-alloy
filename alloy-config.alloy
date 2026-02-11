@@ -1,12 +1,10 @@
 // Receive OTLP from apps (logs + traces)
 otelcol.receiver.otlp "default" {
-  protocols {
-    http {
-      endpoint = "0.0.0.0:4318"
-    }
-    grpc {
-      endpoint = "0.0.0.0:4317"
-    }
+  http {
+    endpoint = "0.0.0.0:4318"
+  }
+  grpc {
+    endpoint = "0.0.0.0:4317"
   }
 
   output {
@@ -25,10 +23,18 @@ otelcol.processor.batch "default" {
 
 // Export logs to Loki
 otelcol.exporter.loki "default" {
-  endpoint = "https://loki-railway-production-ef5d.up.railway.app/loki/api/v1/push"
+  forward_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
+  endpoint {
+    url = "https://loki-railway-production-ef5d.up.railway.app/loki/api/v1/push"
+  }
 }
 
 // Export traces to Tempo (OTLP/HTTP)
 otelcol.exporter.otlphttp "tempo" {
-  endpoint = "http://railway-tempo.railway.internal:4318"
+  client {
+    endpoint = "http://railway-tempo.railway.internal:4318"
+  }
 }
