@@ -16,7 +16,7 @@ otelcol.receiver.otlp "default" {
 // Batch before exporting
 otelcol.processor.batch "default" {
   output {
-    logs = [otelcol.exporter.loki.default.input]
+    logs = [otelcol.exporter.loki.default.input, otelcol.exporter.debug.logs.input]
     traces = [otelcol.exporter.otlphttp.tempo.input]
   }
 }
@@ -25,6 +25,9 @@ otelcol.processor.batch "default" {
 otelcol.exporter.loki "default" {
   forward_to = [loki.write.default.receiver]
 }
+
+// Debug logs to stdout
+otelcol.exporter.debug "logs" {}
 
 loki.write "default" {
   endpoint {
