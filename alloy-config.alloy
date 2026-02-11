@@ -1,7 +1,3 @@
-http {
-  listen_address = "0.0.0.0:9999"
-}
-
 // Receive OTLP from apps (logs + traces)
 otelcol.receiver.otlp "default" {
   http {
