@@ -1,7 +1,7 @@
 // Receive OTLP from apps (logs + traces)
 otelcol.receiver.otlp "default" {
   http {
-    endpoint = "0.0.0.0:${PORT}"
+    endpoint = "0.0.0.0:" + env("PORT")
   }
   grpc {
     endpoint = "0.0.0.0:4317"
